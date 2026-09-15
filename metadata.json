@@ -1,0 +1,8 @@
+{
+  "name": "Remix İznik Harita Proje",
+  "description": "İznik Harita Proje - Mustafa Kemal Paşa Mh. Göl Sok. No:4 D:A İznik / Bursa adresinde 7/24 açık tescilli harita ve kadastro mühendislik hizmetleri, imar uygulamaları, aplikasyon, sınır tespiti ve plankote haritaları. Tel: 0534 416 20 05",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
