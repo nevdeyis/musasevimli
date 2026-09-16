@@ -85,14 +85,14 @@ export const OfficeLocationMap: React.FC = () => {
 
     const map = L.map(mapContainerRef.current, {
       center: [officeLat, officeLng],
-      zoom: 16,
+      zoom: 17,
       zoomControl: true,
-      scrollWheelZoom: false, // Prevent accidental scrolling when browsing page
+      scrollWheelZoom: false,
     });
 
     mapInstanceRef.current = map;
 
-    // Add default street layer (OpenStreetMap)
+    // Default street layer
     const streetLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap contributors',
       maxZoom: 19
@@ -100,22 +100,36 @@ export const OfficeLocationMap: React.FC = () => {
 
     currentTileLayerRef.current = streetLayer;
 
-    // Add Office Marker with Popup
+    // Force map to adjust its container sizing
+    setTimeout(() => {
+      map.invalidateSize();
+    }, 250);
+
+    const handleResize = () => {
+      map.invalidateSize();
+    };
+    window.addEventListener('resize', handleResize);
+
+    // Add Office Marker with detailed popup
     const marker = L.marker([officeLat, officeLng], { icon: customIcon }).addTo(map);
     
     const popupContent = `
-      <div style="font-family: system-ui, sans-serif; padding: 4px 2px; min-width: 220px;">
-        <div style="font-weight: 700; color: #0f172a; font-size: 14px; margin-bottom: 2px;">
+      <div style="font-family: system-ui, sans-serif; padding: 4px 2px; min-width: 230px;">
+        <div style="font-weight: 800; color: #0f172a; font-size: 14px; margin-bottom: 2px;">
           ${officeContact.officeName}
         </div>
-        <div style="font-size: 11px; color: #2563eb; font-weight: 600; margin-bottom: 6px;">
+        <div style="font-size: 11px; color: #2563eb; font-weight: 700; margin-bottom: 6px;">
           ${officeContact.hkmoRegNo}
         </div>
-        <div style="font-size: 12px; color: #475569; margin-bottom: 8px; line-height: 1.4;">
-          ${officeContact.addressFull}
+        <div style="font-size: 12px; color: #334155; margin-bottom: 6px; line-height: 1.4;">
+          <strong>Mustafa Kemal Paşa Mh. Göl Sok. No:4 D:A</strong><br/>
+          16860 İznik / Bursa
         </div>
-        <div style="border-top: 1px solid #e2e8f0; padding-top: 6px; display: flex; justify-content: space-between; font-size: 11px;">
-          <a href="${officeContact.coordinates.googleMapsUrl}" target="_blank" rel="noopener noreferrer" style="color: #2563eb; text-decoration: none; font-weight: bold;">
+        <div style="font-size: 11px; color: #64748b; margin-bottom: 8px;">
+          📍 Asmalı Cami & Kılıçaslan Cad. Yanı
+        </div>
+        <div style="border-top: 1px solid #e2e8f0; padding-top: 6px;">
+          <a href="${officeContact.coordinates.googleMapsUrl}" target="_blank" rel="noopener noreferrer" style="display: block; text-align: center; background: #2563eb; color: #ffffff; padding: 6px 10px; border-radius: 6px; text-decoration: none; font-size: 11px; font-weight: bold;">
             Google Haritalar ile Yol Tarifi &rarr;
           </a>
         </div>
@@ -125,6 +139,7 @@ export const OfficeLocationMap: React.FC = () => {
     marker.bindPopup(popupContent).openPopup();
 
     return () => {
+      window.removeEventListener('resize', handleResize);
       map.remove();
       mapInstanceRef.current = null;
     };
@@ -142,19 +157,16 @@ export const OfficeLocationMap: React.FC = () => {
     let newLayer: L.TileLayer;
 
     if (type === 'satellite') {
-      // Esri World Imagery (Clean high-res satellite)
       newLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, Maxar, Earthstar Geographics',
         maxZoom: 18
       });
     } else if (type === 'topo') {
-      // Topographic
       newLayer = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-        attribution: 'Map data: &copy; OpenStreetMap contributors, SRTM | Map style: &copy; OpenTopoMap (CC-BY-SA)',
+        attribution: '&copy; OpenStreetMap contributors, SRTM | OpenTopoMap',
         maxZoom: 17
       });
     } else {
-      // Standard Street
       newLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors',
         maxZoom: 19
@@ -167,7 +179,7 @@ export const OfficeLocationMap: React.FC = () => {
 
   const recenterMap = () => {
     if (!mapInstanceRef.current) return;
-    mapInstanceRef.current.setView([officeLat, officeLng], 16, { animate: true });
+    mapInstanceRef.current.setView([officeLat, officeLng], 17, { animate: true });
   };
 
   const copyToClipboard = (text: string, fieldId: string) => {
@@ -411,6 +423,56 @@ export const OfficeLocationMap: React.FC = () => {
                   </div>
                 </div>
               </div>
+            </div>
+
+            {/* Geodetic Coordinates & Direct Navigation Card */}
+            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
+                  <Compass className="w-3.5 h-3.5 text-blue-600" />
+                  <span>Teknik Konum & Koordinatlar</span>
+                </span>
+                <button
+                  type="button"
+                  onClick={() => copyToClipboard(`${officeLat}, ${officeLng}`, 'coords')}
+                  className="inline-flex items-center gap-1 text-xs text-slate-600 hover:text-blue-700 font-medium py-1 px-2 rounded-md hover:bg-slate-200 transition-colors"
+                  title="Koordinatları Kopyala"
+                >
+                  {copiedField === 'coords' ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-emerald-600" />
+                      <span className="text-emerald-700 font-semibold">Kopyalandı</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3.5 h-3.5" />
+                      <span>Kopyala</span>
+                    </>
+                  )}
+                </button>
+              </div>
+
+              <div className="font-mono text-xs text-slate-800 bg-white p-2.5 rounded-xl border border-slate-200 space-y-1">
+                <div className="flex justify-between">
+                  <span className="text-slate-500">Enlem / Boylam:</span>
+                  <span className="font-bold text-blue-700">{officeLat}, {officeLng}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-500">WGS84 (DMS):</span>
+                  <span className="text-slate-700 font-semibold">40°25'51.1"N 29°43'09.5"E</span>
+                </div>
+              </div>
+
+              <a
+                href={officeContact.coordinates.googleMapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full py-2.5 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold flex items-center justify-center gap-2 transition-colors shadow-xs"
+              >
+                <Navigation className="w-3.5 h-3.5" />
+                <span>Google Haritalar'da Tam Konuma Git</span>
+                <ExternalLink className="w-3 h-3 ml-auto opacity-70" />
+              </a>
             </div>
 
             {/* Instant Contact Triggers */}

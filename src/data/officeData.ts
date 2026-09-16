@@ -21,16 +21,16 @@ export const officeContact: OfficeContactInfo = {
   workingHoursSaturday: "7/24 Açık",
   workingHoursSunday: "7/24 Açık",
   coordinates: {
-    lat: 40.4288,
-    lng: 29.7185,
-    wgs84Text: "40°25'43.7\"N 29°43'06.6\"E (40.428800, 29.718500)",
-    itrf96Text: "ITRF96 / 3° Dilim 30 - X: 4478195.40, Y: 476142.30",
-    ed50Text: "ED50 / 6° Dilim 35 - X: 4478425.20, Y: 476275.50",
-    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Mustafa+Kemal+Pa%C5%9Fa+Mh.+G%C3%B6l+Sok.+No:4+16860+%C4%B0znik+Bursa",
-    yandexMapsUrl: "https://yandex.com.tr/harita/?rtext=~40.4288,29.7185",
-    appleMapsUrl: "https://maps.apple.com/?daddr=40.4288,29.7185"
+    lat: 40.43085,
+    lng: 29.71930,
+    wgs84Text: "40°25'51.1\"N 29°43'09.5\"E (40.430850, 29.719300)",
+    itrf96Text: "ITRF96 / 3° Dilim 30 - X: 4478420.50, Y: 476170.20",
+    ed50Text: "ED50 / 6° Dilim 35 - X: 4478650.30, Y: 476300.40",
+    googleMapsUrl: "https://www.google.com/maps/dir/?api=1&destination=40.43085,29.71930",
+    yandexMapsUrl: "https://yandex.com.tr/harita/?rtext=~40.43085,29.71930",
+    appleMapsUrl: "https://maps.apple.com/?daddr=40.43085,29.71930&ll=40.43085,29.71930&q=%C4%B0znik+Harita+Proje"
   },
-  directionsNote: "İznik merkezde Mustafa Kemal Paşa Mahallesi, Göl Sokak No:4 D:A (İznik Tarihi Surları ve Göl Sahil Kordonu yakınında, ilçe merkezinden kolay ulaşım).",
+  directionsNote: "İznik merkez Mustafa Kemal Paşa Mahallesi, Göl Sokak No:4 D:A (Asmalı Cami & Kılıçaslan Caddesi yanı, İznik ilçe merkezinden ve Hükümet Konağı / Kaymakamlık aksından kolay ulaşım).",
   parkingInfo: "Ofis binamız önünde ve sokak boyunca müşterilerimize ait ücretsiz araç park yeri mevcuttur.",
   publicTransitInfo: "Bursa Büyükşehir Belediyesi (BBB) İznik İlçe İçi minibüsleri, İznik Otogarı ve ilçe merkezinden kısa yürüme mesafesinde."
 };
